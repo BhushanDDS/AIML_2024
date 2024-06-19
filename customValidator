@@ -1,10 +1,14 @@
+<appSettings>
+		<add key="ValidationSettings:UnobtrusiveValidationMode" value ="None"/>
+	</appSettings>
+
+____________
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
 namespace PracticalNo2All
 {
     public partial class WFValidation : System.Web.UI.Page
@@ -84,4 +88,72 @@ namespace PracticalNo2All
 
     }
 }
+_________________________________
 
+
+
+
+
+
+
+protected void Button1_Click(object sender, EventArgs e)
+        {
+           
+      
+                StringBuilder sb = new StringBuilder();
+
+            if (FileUpload1.HasFile)
+            {
+                try
+                {
+                    sb.AppendFormat("Uploading file :{0}", FileUpload1.FileName);
+
+                    string filename = Path.GetFileName(FileUpload1.FileName);
+                    FileUpload1.SaveAs(Server.MapPath("~/") + filename);
+                }catch(Exception ex)
+                {
+
+                }
+
+                Label1.Text = sb.ToString();
+            }
+        }
+
+____________________________________________________________________________
+
+
+ 
+
+
+
+
+<?xml version="1.0" encoding="utf-8" ?> 
+<Advertisements>
+	<Ad>
+		<ImageUrl>Images/amazon.jpg</ImageUrl>
+		<NavigateUrl>https://www.amazon.in/</NavigateUrl>
+		<AlternateText>
+			Amazon India Online Shopping
+		</AlternateText>
+		<Impressions>5</Impressions>
+		<Keyword>shopping</Keyword>
+	</Ad>
+	<Ad>
+		<ImageUrl>Images/flipkart.jpg</ImageUrl>
+		<NavigateUrl>https://www.flipkart.com/</NavigateUrl>
+		<AlternateText>
+			FlipKart India Online Shopping
+		</AlternateText>
+		<Impressions>5</Impressions>
+		<Keyword>shopping</Keyword>
+	</Ad>
+	<Ad>
+		<ImageUrl>Images/snapdeal.jpg</ImageUrl>
+		<NavigateUrl>https://www.snapdeal.co.in/</NavigateUrl>
+		<AlternateText>
+			SnapDeal India Online Shopping
+		</AlternateText>
+		<Impressions>5</Impressions>
+		<Keyword>shopping</Keyword>
+	</Ad>
+</Advertisements>
