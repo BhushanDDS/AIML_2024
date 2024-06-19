@@ -1,0 +1,496 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace p3
+{
+    public partial class WebForm1 : System.Web.UI.Page
+    {
+        static string constr = ConfigurationManager.ConnectionStrings["studConnString"].ToString();
+
+        SqlConnection conn = null;
+        SqlCommand cmd = null;
+        SqlDataReader dr = null;
+        DataTable dt = null;
+
+
+        public void showData()
+        {
+            try{
+
+
+                cmd = new SqlCommand("SELECT * FROM stud", conn);
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+                dt = new DataTable();
+                dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                GridView1.DataSource = dt;
+                GridView1.DataBind();
+
+
+            }
+            catch(Exception ex)
+            {
+                Label5.Text = "Exception"+ex.Message;
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            conn = new SqlConnection(constr);
+            showData();
+
+        }
+
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+            try
+            {
+
+                if(txtRollno.Text!= "" && txtName.Text !="" && txtAddress.Text != "")
+                {
+                    cmd = new SqlCommand("INSERT INTO stud VALUES(@rn,@nm,@add)", conn);
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Parameters.AddWithValue("@rn", txtRollno.Text);
+                    cmd.Parameters.AddWithValue("@nm", txtName.Text);
+                    cmd.Parameters.AddWithValue("@add", txtAddress.Text);
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Inserted";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch(Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+        }
+
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (txtRollno.Text != "")
+                {
+                    cmd = new SqlCommand("DELETE stud WHERE rollno=@rn", conn);
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Parameters.AddWithValue("@rn", txtRollno.Text);
+                   
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Deleted";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+
+        }
+
+        protected void btnUpdate_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (txtRollno.Text != "" && txtName.Text != "" && txtAddress.Text != "")
+                {
+                    cmd = new SqlCommand("UPDATE stud SET name=@nm,address=@add WHERE rollno=@rn", conn);
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Parameters.AddWithValue("@rn", txtRollno.Text);
+                    cmd.Parameters.AddWithValue("@nm", txtName.Text);
+                    cmd.Parameters.AddWithValue("@add", txtAddress.Text);
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Updated";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+
+        }
+
+        protected void btnSearch_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (TextBox4.Text != "")
+                {
+                    cmd = new SqlCommand("SELECT * FROM stud WHERE rollno=@rn ", conn);
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Parameters.AddWithValue("@rn", TextBox4.Text);
+                    dr = cmd.ExecuteReader();
+
+                    if (dr.Read())
+                    {
+                        Label5.Text = "Records Found Succesfully";
+
+                        txtRollno.Text = dr[0].ToString();
+                        txtName.Text = dr[1].ToString();
+                        txtAddress.Text = dr[2].ToString();
+                    }
+                    else
+                    {
+                        Label5.Text=("Records Not Found");
+                    }
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+
+        }
+
+        protected void btnSort_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DataView dv = new DataView(dt);
+               // dv.Sort = TextBox4.Text; // name ASC
+                dv.RowFilter = TextBox4.Text; //"address =Mumbai"
+                GridView1.DataSource = dv;
+                GridView1.DataBind();
+            }catch(Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+               
+            }
+        }
+
+        protected void btnAddSP_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (txtRollno.Text != "" && txtName.Text != "" && txtAddress.Text != "")
+                {
+                    cmd = new SqlCommand();
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "insertData";
+
+                    cmd.Parameters.Add(new SqlParameter("@RollNo", SqlDbType.SmallInt)).Value =
+                        Convert.ToInt16(txtRollno.Text);
+
+
+                    cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.VarChar)).Value =
+                        txtName.Text;
+
+                    cmd.Parameters.Add(new SqlParameter("@Address", SqlDbType.VarChar)).Value =
+                        txtAddress.Text;
+
+
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Inserted";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+
+        }
+
+        protected void btnSrcSP_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (TextBox4.Text != "")
+                {
+                    cmd = new SqlCommand();
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "srcData";
+
+
+                    cmd.Parameters.Add(new SqlParameter("@RollNo", SqlDbType.SmallInt)).Value =
+                        Convert.ToInt16(TextBox4.Text);
+                    dr = cmd.ExecuteReader();
+                    if (dr.HasRows)
+                    {
+                        Label5.Text = "Got The Records ";
+
+
+                        while (dr.Read())
+                        {
+
+
+                            txtRollno.Text = dr[0].ToString();
+                            txtName.Text = dr[1].ToString();
+                            txtAddress.Text = dr[2].ToString();
+                        }
+                    }
+                    else
+                    {
+                        Label5.Text = ("Records Not Found");
+                    }
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+        }
+
+        protected void btnDltSP_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (txtRollno.Text != "")
+                {
+                    cmd = new SqlCommand();
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "deleteData";
+
+
+                    cmd.Parameters.Add(new SqlParameter("@RollNo", SqlDbType.SmallInt)).Value =
+                        Convert.ToInt16(txtRollno.Text);
+
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Deleted";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+        }
+
+        protected void btnUpdateSP_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+
+                if (txtRollno.Text != "" && txtName.Text != "" && txtAddress.Text != "")
+                {
+                    cmd = new SqlCommand();
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+                    cmd.Connection = conn;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.CommandText = "updateData";
+
+                    cmd.Parameters.Add(new SqlParameter("@RollNo", SqlDbType.SmallInt)).Value =
+                        Convert.ToInt16(txtRollno.Text);
+
+
+                    cmd.Parameters.Add(new SqlParameter("@Name", SqlDbType.VarChar)).Value =
+                        txtName.Text;
+
+                    cmd.Parameters.Add(new SqlParameter("@Address", SqlDbType.VarChar)).Value =
+                        txtAddress.Text;
+
+                    int r = cmd.ExecuteNonQuery();
+
+                    if (r != 0)
+                    {
+                        TextBox4.Text = "Record Updated";
+                    }
+                    else
+                    {
+                        TextBox4.Text = "Failed!!";
+                    }
+
+
+                }
+                else
+                {
+                    Label5.Text = "Please Enter Data!";
+                }
+            }
+            catch (Exception ex)
+            {
+                Label5.Text = "Exception" + ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+                showData();
+
+            }
+
+        }
+    }
+}
+
+
+/*
+ * cmd =new SqlCommand("INSERT INTO stud VALUES(@rn,@nm,@add)",conn);
+ *  @rn -->placeholder
+ * */
