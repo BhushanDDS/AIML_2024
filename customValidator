@@ -1,3 +1,19 @@
+ protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Label1.Text = "You selected: " + DropDownList1.SelectedItem.Text;
+
+        }
+
+
+  <asp:DropDownList ID="DropDownList1" runat="server"  OnSelectedIndexChanged="DropDownList1_SelectedIndexChanged" AutoPostBack="True">
+                <asp:ListItem Value="0">Select an option</asp:ListItem>
+                <asp:ListItem Value="1">Option 1</asp:ListItem>
+                <asp:ListItem Value="2">Option 2</asp:ListItem>
+                <asp:ListItem Value="3">Option 3</asp:ListItem>
+            </asp:DropDownList>
+
+
+
 <appSettings>
 		<add key="ValidationSettings:UnobtrusiveValidationMode" value ="None"/>
 	</appSettings>
