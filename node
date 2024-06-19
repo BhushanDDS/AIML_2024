@@ -1,0 +1,93 @@
+angular
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WF_AngularJSDemo1.aspx.cs" Inherits="p2.WF_AngularJSDemo1" %>
+
+<!DOCTYPE html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js">
+</script>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div ng-app="">
+            <asp:Label ID="Label1" runat="server" Text="Name:"></asp:Label>
+            <asp:TextBox ID="TextBox1" runat="server" ng-model="name"></asp:TextBox>
+            
+        <h1>Hello  {{name}}</h1>
+        </div>
+
+    </form>
+</body>
+</html>
+
+
+
+jquery
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="WF_JQueryDemo2.aspx.cs" Inherits="p2.WebForm3" %>
+
+<!DOCTYPE html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"
+type="text/javascript"> </script>
+<script type = "text/javascript" src="/jquery/jquery-3.7.1.js"></script>
+<script type="text/javascript">
+ $(document).ready(function () {
+ $('#btnSubmit').click(function () {
+ alert('Alert using jQuery');
+ });
+ });
+</script>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+              <asp:Button ID="btnSubmit" runat="server" Text="Submit" />
+        </div>
+    </form>
+</body>
+</html>
+
+
+
+
+
+Node
+index.pug:
+
+extends layout
+block content
+ h1= title
+ p Welcome to #{title}
+ script.
+ var f1 = function(){document.getElementById('myImage').src='#{data.item1}'}
+ script.
+ var f2 = function(){document.getElementById('myImage').src='#{data.item2}'}
+ script.
+ var f3 = function(){document.getElementById('myImage').src='#{data.item3}'}
+ button(onclick='f1()') One!
+ button(onclick='f2()') Two!
+ button(onclick='f3()') Three!
+ p
+ a: img(id='myImage' height='300' width='300' src='')
+index.js:
+'use strict';
+var express = require('express');
+var router = express.Router();
+var getData = function () {
+ var data = {
+ 'item1': 'https://images.unsplash.com/photo-1563422156298-c778a278f9a5',
+ 'item2': 'https://images.unsplash.com/photo-1620173834206-c029bf322dba',
+ 'item3': 'https://images.unsplash.com/photo-1602491673980-73aa38de027a'
+ }
+ return data;
+}
+/* GET home page. */
+router.get('/', function (req, res) {
+ res.render('index', { title: 'Express', "data": getData() });
+});
+module.exports = router; 
+
