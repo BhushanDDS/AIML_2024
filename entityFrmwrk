@@ -1,0 +1,67 @@
+empDBENtities db= new empDBEnttities()
+
+
+public void showData(){
+
+try 
+
+{
+gridview.datasource=db.EmpInfoes.ToList();
+gridViewDetails.DataBind();
+}
+
+}
+finally{
+showdata();
+}
+
+
+
+btnClickAdd{
+
+try{
+EmpInfo empObj =new EmpInfo();
+
+empObj.empid=Convert.Toint32(txtId.Text);
+
+
+db.EmpInfoes.Add(empObj);
+db.SaveChanges();
+
+showData();
+
+}
+
+}
+
+
+
+
+btnDel{
+EmpInfo objDel=db.EmpInfo.Find(Convert.ToInt32(txt.Text));
+if(objDel){
+db.EmpInFoes.Remove(objDel);
+db.SaveChanges();
+
+}
+
+}
+
+
+
+
+
+serch 
+
+
+try{
+EmpInfo empobjsr=db.EmpInfoes.Find(txt.Text)
+
+if(EmpInfo != null){
+txtEmpId.text=empobjsr.empid.Tosting()
+txtName.text=empobjsr.name
+
+}
+
+
+}
