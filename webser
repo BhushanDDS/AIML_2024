@@ -1,0 +1,98 @@
+static string conStr = ConfigurationManager.ConnectionStrings["EmpConStr"].ToString();
+SqlConnection conn = new SqlConnection(conStr);
+SqlCommand cmd = null;
+SqlDataReader dr = null;
+DataTable dt = null;
+[WebMethod]
+public DataTable DisplayAllRecord()
+{
+try
+{
+cmd = new SqlCommand("SELECT * FROM emp_info", conn);
+if (conn.State == ConnectionState.Closed)
+{
+conn.Open();
+}
+dt = new DataTable("empTable");
+dr = cmd.ExecuteReader();
+dt.Load(dr);
+}
+catch (Exception ex)
+{
+// throw ex("Exception! " + ex.Message);
+}
+finally
+{
+conn.Close();
+}
+return dt;
+}
+
+
+[WebMethod]
+public string InsertRecord(int eid, string ename, int enumber, string eaddress)
+{
+string msg;
+try
+{
+cmd = new SqlCommand("INSERT INTO emp_info VALUES
+(@eid,@ename,@enumber,@eaddress)", conn);
+if (conn.State == ConnectionState.Closed)
+{
+conn.Open();
+}
+cmd.Parameters.AddWithValue("@eid", eid);
+cmd.Parameters.AddWithValue("@ename", ename);
+cmd.Parameters.AddWithValue("@enumber", enumber);
+cmd.Parameters.AddWithValue("@eaddress",eaddress);
+
+int r = cmd.ExecuteNonQuery();
+if (r != 0)
+{
+msg = "Record Inserted Sucessfully";
+}
+else
+{
+msg = "Record Not Inserted Sucessfully";
+}
+
+}
+catch (Exception ex)
+
+{
+msg = "Exception " + ex.Message;
+}
+finally
+{
+conn.Close();
+
+}
+return msg;
+
+}
+
+
+
+
+
+
+int Id = Convert.ToInt32(txtID.Text);
+string Name = txtName.Text;
+int Number = Convert.ToInt32(txtNumber.Text);
+string Address = txtAddress.Text;
+
+lblMessage.Text = proxy.InsertRecord(Id, Name, Number, Address);
+
+
+
+protected void btnShow_Click(object sender, EventArgs e)
+{
+dt = proxy.DisplayAllRecord();
+GVEmployeeInfo.DataSource = dt;
+GVEmployeeInfo.DataBind();
+}
+
+
+
+
+
