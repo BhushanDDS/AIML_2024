@@ -1,0 +1,130 @@
+the first address inn the block can found by setting the rightmost 32 -n bits of IP address to 0s
+Where n is the Mask
+Ulternatively :-
+first address can be found by perfoerming &&(AND) operation btwn Ip address and servlet mask
+
+
+To find Last addresss in the Block
+-The last address in the block can be found by setting the rightmost 32-n bits of Ip address to 1s.
+Where N is the subnet Mask
+Ulternatively :-
+Last address in the block can be found by performing OR(||) operation between , Ip address and Compliment of Mask.
+Complimebnt of Mask 1->0
+  	            0->1
+
+Total number of address in the block can be found by using the formula
+  (32-n)	
+2
+
+Usable addresses 
+ (32-n)	
+2      -2
+
+__________________________________________________________________________________________________________
+Ecample 
+A block of address is granted to a small organisation , We know that One of the address in the block is 
+205.16.37.39/28
+Converting it to its binary form
+11001101   00010000  00100101  00100111
+
+First IP ADDRESS :-
+set the rightmost 32-n bits to 0;
+                  32-28= 4 bits to 0;
+11001101   00010000  00100101  0010[0000]   ----(set last four bits to 0)
+205		16`	37	32
+32 is our first address.
+		      ______________	 
+First IPaddress is  || 205.16.37.32 ||
+__________________________________________________________________________________________________________
+
+
+Calculate Last Adress :-
+Set  rightmost 32-n bits to 1s.
+ 32-28= 4 bits to 0;
+11001101   00010000  00100101  0010[1111]   ----(set last four bits to 1)
+
+47 is our last Ip address 
+Last IPaddress is  || 205.16.37.47 ||
+__________________________________________________________________________________________________________
+
+
+Calculate Total Number Of addresses:-
+Formula 
+ (32-n)	
+2
+
+
+(32-28)	
+2
+
+(4)	
+2
+
+16 Addresses 
+ 	  	   	       ____
+Number Of Total Addresses is || 16 ||
+
+__________________________________________________________________________________________________________
+Any Binary Pattern is divisible by 2^n if and only if its least significant N bits(rightmost) are Zeros(0). 
+__________________________________________________________________________________________________________
+
+Example 2
+One of the Ip address in the given block is 182.44.82.16/26
+Find First and Last , awa Total Number of addresses in the block 
+
+10110110 00101100 01100110 00010000
+
+First Address :-
+32-n   32-26 => 6
+
+10110110 00101100 01010010 00000000 ---(set last 6 bits to 0)
+00000000 ->0
+182.44.82.0/26
+
+Last Address:-
+10110110 00101100 01010010 00111111 ---(set last 6 bits to 1)
+00111111 ->63
+182.44.82.63/26
+
+Total Number Of Addresses 
+2^6
+64
+__________________________________________________________________________________________________________
+
+Example 
+Given the Ip address 20.10.30.35/27
+Find the range of Ip address in the given block.
+
+00010100 00001010 00011110 00100011
+Getting First
+32-27=>5
+00010100 00001010 00011110 00100000
+32
+20.10.30.32/27
+
+Getting Last
+00010100 00001010 00011110 00111111
+63
+20.10.30.63/27
+
+total
+2^5=64
+
+__________________________________________________________________________________________________________
+Example 
+Given the Ip address 100.1.2.35/20
+Find the range of Ip address in the given block.
+  00000010 00000010 00100011
+32-20 => 12
+First :-
+last 12 bits will change
+       00000001 00000000 00000000
+100.1.0.0/20
+
+Last :-
+   00000001 00001111 11111111
+      1     50   255
+100.1.50.255/20
+
+Total
+2^12
